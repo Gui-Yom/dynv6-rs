@@ -3,13 +3,13 @@ use serde::{Deserialize, Serialize};
 static BASE_URL: &str = "https://dynv6.com/api/v2";
 
 pub struct DynV6 {
-    pub token: String
+    pub token: String,
 }
 
 impl DynV6 {
     pub fn new(token: &str) -> DynV6 {
         DynV6 {
-            token: token.to_string()
+            token: token.to_string(),
         }
     }
 
@@ -40,7 +40,12 @@ impl DynV6 {
             .expect("Can't retrieve zone details by name")
     }
 
-    pub fn update_zone(&self, zone_id: u64, ipv4: &str, ipv6: Option<&str>) -> Result<(), ureq::Error> {
+    pub fn update_zone(
+        &self,
+        zone_id: u64,
+        ipv4: &str,
+        ipv6: Option<&str>,
+    ) -> Result<(), ureq::Error> {
         ureq::patch(&format!("{}/zones/{}", BASE_URL, zone_id))
             .auth_kind("Bearer", &self.token)
             .set("Accept", "application/json")
@@ -72,20 +77,26 @@ impl DynV6 {
     }
 
     pub fn get_record(&self, zone_id: u64, record_id: u64) -> Record {
-        ureq::get(&format!("{}/zones/{}/records/{}", BASE_URL, zone_id, record_id))
-            .auth_kind("Bearer", &self.token)
-            .set("Accept", "application/json")
-            .call()
-            .into_json_deserialize::<Record>()
-            .expect("Can't retrieve record by id")
+        ureq::get(&format!(
+            "{}/zones/{}/records/{}",
+            BASE_URL, zone_id, record_id
+        ))
+        .auth_kind("Bearer", &self.token)
+        .set("Accept", "application/json")
+        .call()
+        .into_json_deserialize::<Record>()
+        .expect("Can't retrieve record by id")
     }
 
     pub fn delete_record(&self, zone_id: u64, record_id: u64) -> bool {
-        ureq::delete(&format!("{}/zones/{}/records/{}", BASE_URL, zone_id, record_id))
-            .auth_kind("Bearer", &self.token)
-            .set("Accept", "application/json")
-            .call()
-            .ok()
+        ureq::delete(&format!(
+            "{}/zones/{}/records/{}",
+            BASE_URL, zone_id, record_id
+        ))
+        .auth_kind("Bearer", &self.token)
+        .set("Accept", "application/json")
+        .call()
+        .ok()
     }
 
     pub fn add_record(&self, zone_id: u64, new: CreateRecord) -> Record {
@@ -97,6 +108,8 @@ impl DynV6 {
             .expect("Can't retrieve record by id")
     }
 }
+
+// objects
 
 #[derive(Serialize, Deserialize)]
 pub struct Zone {
