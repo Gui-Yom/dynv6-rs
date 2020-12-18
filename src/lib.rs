@@ -6,6 +6,8 @@ pub struct DynV6 {
     pub token: String,
 }
 
+// Remaining : Create zone and Update record
+
 impl DynV6 {
     pub fn new(token: &str) -> DynV6 {
         DynV6 {
@@ -56,8 +58,6 @@ impl DynV6 {
             .ok();
         Ok(())
     }
-
-    pub fn create_zone(&self) {}
 
     pub fn delete_zone(&self, id: u64) -> bool {
         ureq::delete(&format!("{}/zones/{}", BASE_URL, id))
