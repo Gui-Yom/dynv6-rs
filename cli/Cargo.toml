@@ -8,4 +8,5 @@ edition = "2018"
 
 [dependencies]
 dynv6-rs = { path = ".." }
-clap = { version = "3.0.0-beta.2", features = ["color", "derive"] }
+clap = { version = "3.0.0-beta.2", features = ["color", "derive", "wrap_help", "suggestions"] }
+termcolor = "1.1"
